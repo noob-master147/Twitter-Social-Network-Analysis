@@ -2,10 +2,9 @@ package main
 
 func main() {
 	cards := newDeck()
+	cards.saveToFile("New Deck")
+	// hand, remainingCards := deal(cards, 7)
 
-	cards.print()
-}
-
-func newCard() string {
-	return "Five of Diamonds"
+	// hand.print()
+	// remainingCards.print()
 }
