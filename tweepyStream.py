@@ -6,6 +6,7 @@ from tweepy import Stream
 
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import CREDENTIALS
 
 # # # # TWITTER CLIENT # # # #
@@ -101,7 +102,7 @@ class TweetAnaLyser():
 
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame(
-            data=[tweet.text for tweet in tweets], columns=['Tweets'])
+            data=[tweet.text for tweet in tweets], columns=['tweets'])
         df['id'] = np.array([tweet.id for tweet in tweets])
         df['retweets'] = np.array([tweet.retweet_count for tweet in tweets])
         df['date'] = np.array([tweet.created_at for tweet in tweets])
@@ -116,8 +117,15 @@ if __name__ == '__main__':
     tweet_analser = TweetAnaLyser()
     api = twitter_client.get_twitter_client_api()
 
-    tweets = api.user_timeline(screen_name="Infosys", count=20)
-    print(dir(tweets[0]))
+    tweets = api.user_timeline(screen_name="Infosys", count=200)
+    # print(dir(tweets[0]))
     df = tweet_analser.tweets_to_data_frame(tweets)
 
-    # print(df.head(20))
+    # Time series of retweets
+    time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
+    time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
+
+    time_like = pd.Series(data=df['likes'].values, index=df['date'])
+    time_like.plot(figsize=(16, 4), label="likes", legend=True)
+
+    plt.show()
