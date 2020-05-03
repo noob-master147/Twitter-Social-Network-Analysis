@@ -4,7 +4,9 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
-import twitter_credentials
+import pandas as pd
+import numpy as np
+import CREDENTIALS
 
 # # # # TWITTER CLIENT # # # #
 
@@ -15,6 +17,9 @@ class TwitterClient():
         self.twitter_client = API(self.auth)
 
         self.twitter_user = twitter_user
+
+    def get_twitter_client_api(self):
+        return self.twitter_client
 
     def get_user_timeline_tweets(self, num_tweets):
         tweets = []
@@ -39,10 +44,10 @@ class TwitterClient():
 class TwitterAuthenticator():
 
     def authenticate_twitter_app(self):
-        auth = OAuthHandler(twitter_credentials.CONSUMER_KEY,
-                            twitter_credentials.CONSUMER_SECRET)
-        auth.set_access_token(twitter_credentials.ACCESS_TOKEN,
-                              twitter_credentials.ACCESS_TOKEN_SECRET)
+        auth = OAuthHandler(CREDENTIALS.CONSUMER_KEY,
+                            CREDENTIALS.CONSUMER_SECRET)
+        auth.set_access_token(CREDENTIALS.ACCESS_TOKEN,
+                              CREDENTIALS.ACCESS_TOKEN_SECRET)
         return auth
 
 # # # # TWITTER STREAMER # # # #
@@ -92,15 +97,19 @@ class TwitterListener(StreamListener):
         print(status)
 
 
+class TweetAnaLyser():
+
+    def tweets_to_data_frame(self, tweets):
+        df = pd.DataFrame(
+            data=[tweet.text for tweet in tweets], columns=['Tweets'])
+        return df
+
+
 if __name__ == '__main__':
+    twitter_client = TwitterClient()
+    tweet_analser = TweetAnaLyser()
+    api = twitter_client.get_twitter_client_api()
 
-    # Authenticate using config.py and connect to Twitter Streaming API.
-    hash_tag_list = ["donal trump", "hillary clinton",
-                     "barack obama", "bernie sanders"]
-    fetched_tweets_filename = "tweets.txt"
-
-    twitter_client = TwitterClient('pycon')
-    print(twitter_client.get_user_timeline_tweets(1))
-
-#    twitter_streamer = TwitterStreamer()
-#    twitter_streamer.stream_tweets(fetched_tweets_filename, hash_tag_list)
+    tweets = api.user_timeline(screen_name="realDonaldTrump", count=20)
+    df = tweet_analser.tweets_to_data_frame(tweets)
+    print(df)
