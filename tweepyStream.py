@@ -10,7 +10,7 @@ import CREDENTIALS
 
 class TwitterClient():
     def __init__(self):
-        self.auth = TwitterAuthenticator.authenticateTwitterApp()
+        self.auth = TwitterAuthenticator().authenticateTwitterApp()
         self.twitter_client = API(self.auth)
 
     def get_user_timeline_tweets(self, num_tweets):
@@ -18,7 +18,6 @@ class TwitterClient():
         for tweet in Cursor(self.twitter_client.user_timeline).items(num_tweets):
             tweets.append(tweet)
         return tweets
-
 
 
 # # # # TWITTER AUTHENTICATION # # # #
