@@ -9,15 +9,22 @@ import CREDENTIALS
 
 
 class TwitterClient():
-    def __init__(self):
+    def __init__(self, twitter_user=None):
         self.auth = TwitterAuthenticator().authenticateTwitterApp()
         self.twitter_client = API(self.auth)
+        self.twitter_user = twitter_user
 
     def get_user_timeline_tweets(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.user_timeline).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.user_timeline, id=self.twitter_user).items(num_tweets):
             tweets.append(tweet)
         return tweets
+
+    def get_friend_list(self, num_friends):
+        friend_list = []
+        for friend in Cursor(self.twitter_client.friends, id=self.twitter_user).items(num_friends):
+            friend_list.append(friend)
+        return friend_list
 
 
 # # # # TWITTER AUTHENTICATION # # # #
@@ -81,7 +88,7 @@ if __name__ == '__main__':
                      "barack obama", "bernie sanders"]
     fetched_tweets_filename = "tweets.json"
 
-    twitter_client = TwitterClient()
-    print(twitter_client.get_user_timeline_tweets(5))
+    twitter_client = TwitterClient("github")
+    print(twitter_client.get_user_timeline_tweets(1))
     # twitter_streamer = TwitterStreamer()
     # twitter_streamer.stream_tweets(fetched_tweets_filename, hash_tag_list)
