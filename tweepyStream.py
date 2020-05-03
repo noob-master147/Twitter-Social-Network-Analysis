@@ -1,10 +1,35 @@
+from tweepy import API
+from tweepy import Cursor
+
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
 import CREDENTIALS
 
-# # # # TWITTER STREAMER # # # #
+
+class TwitterClient():
+    def __init__(self):
+        self.auth = TwitterAuthenticator.authenticateTwitterApp()
+        self.twitter_client = API(self.auth)
+
+    def get_user_timeline_tweets(self, num_tweets):
+        tweets = []
+        for tweet in Cursor(self.twitter_client.user_timeline).items(num_tweets):
+            tweets.append(tweet)
+        return tweets
+
+
+
+# # # # TWITTER AUTHENTICATION # # # #
+class TwitterAuthenticator():
+
+    def authenticateTwitterApp(self):
+        auth = OAuthHandler(CREDENTIALS.CONSUMER_KEY,
+                            CREDENTIALS.CONSUMER_SECRET)
+        auth.set_access_token(CREDENTIALS.ACCESS_TOKEN,
+                              CREDENTIALS.ACCESS_TOKEN_SECRET)
+        return auth
 
 
 class TwitterStreamer():
@@ -13,15 +38,12 @@ class TwitterStreamer():
     """
 
     def __init__(self):
-        pass
+        self.twitter_authenticator = TwitterAuthenticator()
 
     def stream_tweets(self, fetched_tweets_filename, hash_tag_list):
         # This handles Twitter authetification and the connection to Twitter Streaming API
-        listener = StdOutListener(fetched_tweets_filename)
-        auth = OAuthHandler(CREDENTIALS.CONSUMER_KEY,
-                            CREDENTIALS.CONSUMER_SECRET)
-        auth.set_access_token(CREDENTIALS.ACCESS_TOKEN,
-                              CREDENTIALS.ACCESS_TOKEN_SECRET)
+        listener = TwitterListner(fetched_tweets_filename)
+        auth = self.twitter_authenticator.authenticateTwitterApp()
         stream = Stream(auth, listener)
 
         # This line filter Twitter Streams to capture data by the keywords:
@@ -29,7 +51,7 @@ class TwitterStreamer():
 
 
 # # # # TWITTER STREAM LISTENER # # # #
-class StdOutListener(StreamListener):
+class TwitterListner(StreamListener):
     """
     This is a basic listener that just prints received tweets to stdout.
     """
@@ -48,6 +70,8 @@ class StdOutListener(StreamListener):
         return True
 
     def on_error(self, status):
+        if status == 420:
+            return False
         print(status)
 
 
@@ -58,5 +82,7 @@ if __name__ == '__main__':
                      "barack obama", "bernie sanders"]
     fetched_tweets_filename = "tweets.json"
 
-    twitter_streamer = TwitterStreamer()
-    twitter_streamer.stream_tweets(fetched_tweets_filename, hash_tag_list)
+    twitter_client = TwitterClient()
+    print(twitter_client.get_user_timeline_tweets(5))
+    # twitter_streamer = TwitterStreamer()
+    # twitter_streamer.stream_tweets(fetched_tweets_filename, hash_tag_list)
