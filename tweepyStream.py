@@ -1,11 +1,12 @@
-from tweepy.streaming import StreamListner
+# import tweepy
+from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
 import CREDENTIALS
 
 
-class TweetListner(StreamListner):
+class TweetListner(StreamListener):
 
     def on_data(self, data):
         print(data)
@@ -23,4 +24,4 @@ if __name__ == "__main__":
 
     stream = Stream(auth, listner)
 
-    stream.filter(track=['github'])
+    stream.filter(track=['infosys'])
