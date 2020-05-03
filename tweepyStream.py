@@ -3,10 +3,13 @@ from tweepy import Cursor
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+from textblob import TextBlob
+
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import re
 import CREDENTIALS
 
 # # # # TWITTER CLIENT # # # #
@@ -111,6 +114,19 @@ class TweetAnaLyser():
 
         return df
 
+    def clean_tweet(self, tweet):
+        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
+    def analyse_sentiment(self, tweet):
+        analysis = TextBlob(self.clean_tweet(tweet))
+
+        if analysis.sentiment.polarity > 0:
+            return 1
+        elif analysis.sentiment.polarity == 0:
+            return 0
+        else:
+            return -1
+
 
 if __name__ == '__main__':
     twitter_client = TwitterClient()
@@ -120,12 +136,15 @@ if __name__ == '__main__':
     tweets = api.user_timeline(screen_name="Infosys", count=200)
     # print(dir(tweets[0]))
     df = tweet_analser.tweets_to_data_frame(tweets)
+    df['sentiment'] = np.array(
+        [tweet_analser.analyse_sentiment(tweet) for tweet in df['tweets']])
 
-    # Time series of retweets
-    time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
-    time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
+    print(df.head(10))
+    # # Time series of retweets
+    # time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
+    # time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
 
-    time_like = pd.Series(data=df['likes'].values, index=df['date'])
-    time_like.plot(figsize=(16, 4), label="likes", legend=True)
+    # time_like = pd.Series(data=df['likes'].values, index=df['date'])
+    # time_like.plot(figsize=(16, 4), label="likes", legend=True)
 
-    plt.show()
+    # plt.show()
