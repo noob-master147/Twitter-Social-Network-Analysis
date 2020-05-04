@@ -101,7 +101,7 @@ class TwitterListener(StreamListener):
         print(status)
 
 
-class TweetAnaLyser():
+class TweetAnalyser():
 
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame(
