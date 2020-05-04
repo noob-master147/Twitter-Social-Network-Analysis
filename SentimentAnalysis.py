@@ -133,17 +133,17 @@ class TweetAnalyser():
             [tweet.in_reply_to_status_id for tweet in tweets])
         df['in_reply_to_user_id'] = np.array(
             [tweet.in_reply_to_user_id for tweet in tweets])
-        df['retweeted_id'] = np.array([tweet.retweeted_id for tweet in tweets])
-        df['retweeted_screen_name'] = np.array(
-            [tweet.retweeted_screen_name for tweet in tweets])
-        df['user_mentions_screen_name'] = np.array(
-            [tweet.user_mentions_screen_name for tweet in tweets])
-        df['user_mentions_id'] = np.array(
-            [tweet.user_mentions_id for tweet in tweets])
-        df['user_id'] = np.array([tweet.user_id for tweet in tweets])
-        df['screen_name'] = np.array([tweet.screen_name for tweet in tweets])
-        df['followers_count'] = np.array(
-            [tweet.followers_count for tweet in tweets])
+        # df['retweeted_id'] = np.array([tweet.retweeted_id for tweet in tweets])
+        # df['retweeted_screen_name'] = np.array(
+        # [tweet.retweeted_screen_name for tweet in tweets])
+        # df['user_mentions_screen_name'] = np.array(
+        #     [tweet.user_mentions_screen_name for tweet in tweets])
+        # df['user_mentions_id'] = np.array(
+        #     [tweet.user_mentions_id for tweet in tweets])
+        # df['user_id'] = np.array([tweet.user_id for tweet in tweets])
+        # df['screen_name'] = np.array([tweet.screen_name for tweet in tweets])
+        df['retweet_count'] = np.array(
+            [tweet.retweet_count for tweet in tweets])
 
         return df
 
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     print(dir(tweets[0]))
     df = tweet_analser.tweets_to_data_frame(tweets)
 
-    # print(df.head(20))
+    print(df.head())
     # # Time series of retweets
     # time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
     # time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
