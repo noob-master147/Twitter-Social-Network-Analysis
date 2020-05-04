@@ -9,7 +9,6 @@ from tweepy import Cursor
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-from textblob import TextBlob
 
 
 import pandas as pd
@@ -124,27 +123,32 @@ class TweetAnalyser():
 
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame(
-            data=[tweet.text for tweet in tweets], columns=['tweets'])
+            data=[tweet.text for tweet in tweets], columns=['text'])
+
+        df['created_at'] = np.array([tweet.created_at for tweet in tweets])
         df['id'] = np.array([tweet.id for tweet in tweets])
-        df['retweets'] = np.array([tweet.retweet_count for tweet in tweets])
-        df['date'] = np.array([tweet.created_at for tweet in tweets])
-        df['source'] = np.array([tweet.source for tweet in tweets])
-        df['likes'] = np.array([tweet.favorite_count for tweet in tweets])
+        df['in_reply_to_screen_name'] = np.array(
+            [tweet.in_reply_to_screen_name for tweet in tweets])
+        df['in_reply_to_status_id'] = np.array(
+            [tweet.in_reply_to_status_id for tweet in tweets])
+        df['in_reply_to_user_id'] = np.array(
+            [tweet.in_reply_to_user_id for tweet in tweets])
+        df['retweeted_id'] = np.array([tweet.retweeted_id for tweet in tweets])
+        df['retweeted_screen_name'] = np.array(
+            [tweet.retweeted_screen_name for tweet in tweets])
+        df['user_mentions_screen_name'] = np.array(
+            [tweet.user_mentions_screen_name for tweet in tweets])
+        df['user_mentions_id'] = np.array(
+            [tweet.user_mentions_id for tweet in tweets])
+        df['user_id'] = np.array([tweet.user_id for tweet in tweets])
+        df['screen_name'] = np.array([tweet.screen_name for tweet in tweets])
+        df['followers_count'] = np.array(
+            [tweet.followers_count for tweet in tweets])
 
         return df
 
     def clean_tweet(self, tweet):
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
-
-    def analyse_sentiment(self, tweet):
-        analysis = TextBlob(self.clean_tweet(tweet))
-
-        if analysis.sentiment.polarity > 0:
-            return 1
-        elif analysis.sentiment.polarity == 0:
-            return 0
-        else:
-            return -1
 
 
 # In[7]:
@@ -152,16 +156,14 @@ class TweetAnalyser():
 
 if __name__ == '__main__':
     twitter_client = TwitterClient()
-    tweet_analser = TweetAnaLyser()
+    tweet_analser = TweetAnalyser()
     api = twitter_client.get_twitter_client_api()
 
     tweets = api.user_timeline(screen_name="Infosys", count=20)
-    # print(dir(tweets[0]))
+    print(dir(tweets[0]))
     df = tweet_analser.tweets_to_data_frame(tweets)
-    df['sentiment'] = np.array(
-        [tweet_analser.analyse_sentiment(tweet) for tweet in df['tweets']])
 
-    print(df.head(20))
+    # print(df.head(20))
     # # Time series of retweets
     # time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
     # time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
@@ -173,4 +175,3 @@ if __name__ == '__main__':
 
 
 # In[ ]:
-
