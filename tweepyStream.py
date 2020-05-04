@@ -139,7 +139,7 @@ if __name__ == '__main__':
     df['sentiment'] = np.array(
         [tweet_analser.analyse_sentiment(tweet) for tweet in df['tweets']])
 
-    print(df.head(10))
+    print(df.head(200))
     # # Time series of retweets
     # time_retweets = pd.Series(data=df['retweets'].values, index=df['date'])
     # time_retweets.plot(figsize=(16, 4), label="retweets", legend=True)
