@@ -1,0 +1,137 @@
+/* Disable text selection (set on body when dragging is occurring) */
+._jsPlumb_drag_select * 
+{
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+}
+#main
+{
+	overflow: auto;
+	position: relative;
+	width: 100%;
+	height: 700px;
+}
+.jsplumb-container 
+{
+	position: relative;
+	/* for IE10+ touch devices */
+	touch-action:none;
+}
+
+.dss-visualization .window 
+{
+	border: 1px solid #346789;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
+	width: 80px;
+	height: 80px;
+	cursor: pointer;
+	text-align: center;
+	z-index: 20;
+	position: absolute;
+	background-color: #eeeeef;
+	color: black;
+	font-family: OpenSans, sans-serif;
+	padding: 0.5em;
+	font-size: 0.9em;
+}
+
+.dss-visualization .window.shadow
+{
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+	-o-box-shadow: 2px 2px 19px #aaa;
+	-webkit-box-shadow: 2px 2px 19px #aaa;
+	-moz-box-shadow: 2px 2px 19px #aaa;
+	box-shadow: 2px 2px 19px #aaa;
+	-webkit-transition: -webkit-box-shadow 0.15s ease-in;
+	-moz-transition: -moz-box-shadow 0.15s ease-in;
+	-o-transition: -o-box-shadow 0.15s ease-in;
+	transition: box-shadow 0.15s ease-in;
+}
+
+.dss-visualization .window.shadow:hover 
+{
+	-o-box-shadow: 2px 2px 19px #444;
+	-webkit-box-shadow: 2px 2px 19px #444;
+	-moz-box-shadow: 2px 2px 19px #444;
+	box-shadow: 2px 2px 19px #444;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+}
+
+.dss-visualization ._jsPlumb_connector 
+{
+	z-index: 4;
+}
+
+.dss-visualization ._jsPlumb_endpoint, .endpointTargetLabel, .endpointSourceLabel 
+{
+	z-index: 21;
+	cursor: pointer;
+}
+
+.window._jsPlumb_connected 
+{
+	border: 2px solid green;
+}
+
+.window.jsplumb-drag 
+{
+	border: 4px solid pink;
+}
+
+path, ._jsPlumb_endpoint 
+{
+	cursor: pointer;
+}
+
+.window.switch 
+{
+	border-color: #F0F;
+	background-color: #FCF;
+	font-size: 1.4em;
+	line-height: 80px;
+	-moz-border-radius: 1.5em;
+	border-radius: 1.5em;
+}
+.window.comment
+{
+	width: 160px;
+	height: auto;
+	background-color: #FFE;
+}
+.window.root 
+{
+	border-color: #FA0;
+	background-color: #CCC;
+	font-size: 1.4em;
+	line-height: 80px;
+}
+.window .label
+{
+	position: absolute;
+	bottom: -24px;
+	right: -80px;
+	font-size: 0.5em;
+	line-height: 1.2em;
+	text-align: left;
+	background-color: #AFD;
+	padding: 4px;
+}
+.switch .label
+{
+	top: 10px;
+	right: -50px;
+	bottom: inherit;
+}
+.comment .label
+{
+	top: 10px;
+	right: -20px;
+	bottom: inherit;
+}

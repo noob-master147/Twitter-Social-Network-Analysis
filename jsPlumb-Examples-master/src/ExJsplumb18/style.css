@@ -1,0 +1,14 @@
+.node {
+    border:1px solid black;
+    position:absolute;
+    width:5em;
+    height:5em;
+    padding: 0.5em;
+    z-index:1;
+    border-radius:0.5em;
+    box-shadow: 2px 2px 19px #aaa;
+    background: white;
+    }
+
+    #node0 { top:10em; left:22em;}
+    #node1 { top:15em; left:32em;}

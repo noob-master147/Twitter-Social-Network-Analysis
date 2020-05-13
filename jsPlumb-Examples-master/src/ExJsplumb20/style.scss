@@ -1,0 +1,21 @@
+h1, p {
+    font-family: Lato;
+  }
+  
+   #diagramContainer {
+              padding: 20px;
+              width:80%; height: 200px;
+              border: 1px solid gray;
+          }
+          
+          .item {
+              height:80px; width: 80px;
+              border: 1px solid red;
+              float: left;
+          }
+
+
+    .aLabel {
+        border: 2px solid red;
+        cursor: pointer;
+    }      
